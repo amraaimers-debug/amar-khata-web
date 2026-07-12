@@ -1,6 +1,24 @@
 import { supabase } from "../../../lib/supabase";
 import PostInteractions from "./PostInteractions";
 import AuthorControls from "./AuthorControls";
+import ShareButton from "../../ShareButton";
+
+export async function generateMetadata({ params }) {
+  const { data: post } = await supabase
+    .from("posts")
+    .select("title, content, author_name")
+    .eq("id", params.id)
+    .single();
+
+  if (!post) return { title: "লেখা পাওয়া যায়নি" };
+
+  const description = (post.content || "").split("\n")[0].slice(0, 150);
+  return {
+    title: post.title,
+    description,
+    openGraph: { title: post.title, description },
+  };
+}
 
 export default async function PostPage({ params }) {
   const { data: post } = await supabase.from("posts").select("*").eq("id", params.id).single();
@@ -29,6 +47,13 @@ export default async function PostPage({ params }) {
         style={{ color: "var(--ink)" }}
       >
         {post.content}
+      </div>
+      <div className="flex items-center gap-3 mb-2">
+        <ShareButton
+          title={post.title}
+          className="px-3 py-1.5 rounded-full border font-semibold text-sm flex items-center gap-1.5"
+          style={{ borderColor: "var(--line)", color: "var(--ink)" }}
+        />
       </div>
       <AuthorControls postId={post.id} />
       <PostInteractions post={post} initialComments={comments || []} />
