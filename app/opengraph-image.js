@@ -26,10 +26,17 @@ export default async function Image() {
           color: "#F7F1E2",
         }}
       >
-        <div style={{ fontSize: 96, fontWeight: 700, marginBottom: 22 }}>{title}</div>
-        <div style={{ fontSize: 32, opacity: 0.85 }}>{subtitle}</div>
+        <div style={{ fontSize: 96, fontWeight: 700, marginBottom: 22 }}>
+          {fontData ? title : "Amar Khata"}
+        </div>
+        <div style={{ fontSize: 32, opacity: 0.85 }}>
+          {fontData ? subtitle : "Poems & Stories"}
+        </div>
       </div>
     ),
-    { ...size, fonts: [{ name: "Noto Sans Bengali", data: fontData, style: "normal", weight: 700 }] }
+    {
+      ...size,
+      fonts: fontData ? [{ name: "Noto Sans Bengali", data: fontData, style: "normal", weight: 700 }] : [],
+    }
   );
 }
