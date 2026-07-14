@@ -16,7 +16,7 @@ function catClass(type) {
     : { chip: "bg-[var(--forest)]/10 text-[var(--forest)]", accent: "bg-[var(--forest)]" };
 }
 
-export default function HomeClient({ initialPosts, recentComments }) {
+export default function HomeClient({ initialPosts, recentComments, avatarUrl }) {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const [posts, setPosts] = useState(initialPosts);
@@ -179,9 +179,13 @@ export default function HomeClient({ initialPosts, recentComments }) {
                   <div className={`w-1.5 flex-none ${cc.accent}`}></div>
                   <div className="p-5 flex-1 min-w-0">
                     <div className="flex items-center gap-2 text-xs mb-2 flex-wrap" style={{ color: "var(--muted)" }}>
-                      <span className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-bold" style={{ background: avatarColor(p.author_name) }}>
-                        {(p.author_name || "?")[0]}
-                      </span>
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt={p.author_name} className="w-6 h-6 rounded-full object-cover flex-none" />
+                      ) : (
+                        <span className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-bold" style={{ background: avatarColor(p.author_name) }}>
+                          {(p.author_name || "?")[0]}
+                        </span>
+                      )}
                       <span>{p.author_name}</span><span>·</span>
                       <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${cc.chip}`}>{p.type}</span>
                     </div>

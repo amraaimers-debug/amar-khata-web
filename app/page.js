@@ -16,6 +16,8 @@ export default async function HomePage() {
     .order("created_at", { ascending: false })
     .limit(4);
 
+  const { data: settings } = await supabase.from("site_settings").select("avatar_url").eq("id", 1).single();
+
   if (error) {
     return (
       <p className="text-red-700">
@@ -27,7 +29,7 @@ export default async function HomePage() {
 
   return (
     <Suspense fallback={<p style={{ color: "var(--muted)" }}>লোড হচ্ছে...</p>}>
-      <HomeClient initialPosts={posts || []} recentComments={recentComments || []} />
+      <HomeClient initialPosts={posts || []} recentComments={recentComments || []} avatarUrl={settings?.avatar_url || null} />
     </Suspense>
   );
 }

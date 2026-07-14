@@ -56,6 +56,13 @@ export default function RootLayout({ children }) {
               </Suspense>
               <ThemeToggle />
               <a
+                href="/settings"
+                className="text-sm font-semibold hover:text-[var(--maroon)]"
+                title="প্রোফাইল ছবি বদলান"
+              >
+                প্রোফাইল
+              </a>
+              <a
                 href="/publish"
                 className="text-sm font-bold px-4 py-2 rounded"
                 style={{ background: "var(--maroon)", color: "#fff" }}
