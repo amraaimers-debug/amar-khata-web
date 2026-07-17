@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const alt = "আমার খাতা — কবিতা ও গল্পের ঘর";
 export const size = { width: 1200, height: 630 };
