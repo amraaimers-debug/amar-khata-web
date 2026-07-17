@@ -1,5 +1,4 @@
 import { ImageResponse } from "next/og";
-import { loadBengaliFont } from "../lib/og-font";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -8,9 +7,12 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
+  const fontData = await fetch(new URL("./fonts/NotoSansBengali.ttf", import.meta.url)).then((r) =>
+    r.arrayBuffer()
+  );
+
   const title = "আমার খাতা";
   const subtitle = "কবিতা ও গল্পের একটি ব্যক্তিগত সংকলন";
-  const fontData = await loadBengaliFont(title + subtitle);
 
   return new ImageResponse(
     (
@@ -26,17 +28,10 @@ export default async function Image() {
           color: "#F7F1E2",
         }}
       >
-        <div style={{ fontSize: 96, fontWeight: 700, marginBottom: 22 }}>
-          {fontData ? title : "Amar Khata"}
-        </div>
-        <div style={{ fontSize: 32, opacity: 0.85 }}>
-          {fontData ? subtitle : "Poems & Stories"}
-        </div>
+        <div style={{ fontSize: 96, fontWeight: 700, marginBottom: 22 }}>{title}</div>
+        <div style={{ fontSize: 32, opacity: 0.85 }}>{subtitle}</div>
       </div>
     ),
-    {
-      ...size,
-      fonts: fontData ? [{ name: "Noto Sans Bengali", data: fontData, style: "normal", weight: 700 }] : [],
-    }
+    { ...size, fonts: [{ name: "Noto Sans Bengali", data: fontData, style: "normal" }] }
   );
 }
