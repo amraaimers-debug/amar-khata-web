@@ -2,6 +2,8 @@ import { supabase } from "../../../lib/supabase";
 import PostInteractions from "./PostInteractions";
 import AuthorControls from "./AuthorControls";
 import ShareButton from "../../ShareButton";
+import MarkdownText from "../../MarkdownText";
+import { typeColorVar } from "../../typeColors";
 
 export async function generateMetadata({ params }) {
   const { data: post } = await supabase
@@ -30,24 +32,23 @@ export default async function PostPage({ params }) {
 
   if (!post) return <p>লেখাটি পাওয়া যায়নি।</p>;
 
-  const catColor = post.type === "কবিতা" ? "var(--maroon)" : "var(--forest)";
+  const catColor = typeColorVar(post.type);
 
   return (
     <article className="max-w-2xl mx-auto">
       <div
         className="text-xs font-bold inline-block px-2.5 py-1 rounded-full mb-4"
-        style={{ background: `${catColor}1a`, color: catColor }}
+        style={{ background: `color-mix(in srgb, ${catColor} 16%, transparent)`, color: catColor }}
       >
         {post.type}
       </div>
       <h1 className="font-display text-4xl mb-2">{post.title}</h1>
       <div className="text-sm mb-8" style={{ color: "var(--muted)" }}>{post.author_name}</div>
-      <div
-        className="font-serif text-lg leading-loose whitespace-pre-line mb-10"
+      <MarkdownText
+        text={post.content}
+        className="font-serif text-lg leading-loose mb-10"
         style={{ color: "var(--ink)" }}
-      >
-        {post.content}
-      </div>
+      />
       <div className="flex items-center gap-3 mb-2">
         <ShareButton
           title={post.title}

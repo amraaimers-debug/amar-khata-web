@@ -3,17 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase, getVisitorId } from "../lib/supabase";
 import ShareButton from "./ShareButton";
+import { typeColorVar, ALL_TYPES } from "./typeColors";
+import { stripMarkdown } from "./MarkdownText";
 
 const avatarColors = ["#7C2233", "#2F5D50", "#B4872E", "#5A4A6B"];
 function avatarColor(name) {
   let h = 0;
   for (const c of name || "?") h = (h * 31 + c.charCodeAt(0)) % avatarColors.length;
   return avatarColors[h];
-}
-function catClass(type) {
-  return type === "কবিতা"
-    ? { chip: "bg-[var(--maroon)]/10 text-[var(--maroon)]", accent: "bg-[var(--maroon)]" }
-    : { chip: "bg-[var(--forest)]/10 text-[var(--forest)]", accent: "bg-[var(--forest)]" };
 }
 
 export default function HomeClient({ initialPosts, recentComments, avatarUrl }) {
@@ -102,7 +99,7 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
               {heroPost.title}
             </a>
             <p className="font-serif mb-3" style={{ color: "var(--ink)", opacity: 0.85 }}>
-              {(heroPost.content || "").split("\n")[0]}
+              {stripMarkdown((heroPost.content || "").split("\n")[0])}
             </p>
             <div className="flex items-center gap-2 text-xs" style={{ color: "var(--muted)" }}>
               <span>{heroPost.author_name}</span><span>·</span>
@@ -139,8 +136,8 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
               {view === "saved" ? "সংরক্ষিত লেখা" : "সাম্প্রতিক লেখা"}
             </h2>
             <div className="flex items-center gap-3 flex-wrap">
-              <div className="flex rounded-full overflow-hidden border" style={{ borderColor: "var(--line)" }}>
-                {["সব", "কবিতা", "গল্প"].map((f) => (
+              <div className="flex flex-wrap rounded-full overflow-hidden border" style={{ borderColor: "var(--line)" }}>
+                {["সব", ...ALL_TYPES].map((f) => (
                   <button
                     key={f}
                     onClick={() => setTypeFilter(f)}
@@ -171,12 +168,12 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
               </div>
             )}
             {visible.map((p) => {
-              const cc = catClass(p.type);
+              const catColor = typeColorVar(p.type);
               const isLiked = likedIds.includes(p.id);
               const isSaved = saved.includes(p.id);
               return (
                 <article key={p.id} className="flex rounded-lg overflow-hidden shadow-sm" style={{ border: "1px solid var(--line)", background: "var(--surface)" }}>
-                  <div className={`w-1.5 flex-none ${cc.accent}`}></div>
+                  <div className="w-1.5 flex-none" style={{ background: catColor }}></div>
                   <div className="p-5 flex-1 min-w-0">
                     <div className="flex items-center gap-2 text-xs mb-2 flex-wrap" style={{ color: "var(--muted)" }}>
                       {avatarUrl ? (
@@ -186,12 +183,17 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
                           {(p.author_name || "?")[0]}
                         </span>
                       )}
-                      <span>{p.author_name}</span><span>·</span>
-                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${cc.chip}`}>{p.type}</span>
+                      <span style={{ color: "var(--ink)" }}>{p.author_name}</span><span>·</span>
+                      <span
+                        className="text-[11px] font-bold px-2 py-0.5 rounded-full"
+                        style={{ background: `color-mix(in srgb, ${catColor} 16%, transparent)`, color: catColor }}
+                      >
+                        {p.type}
+                      </span>
                     </div>
                     <a href={`/post/${p.id}`} className="font-display text-xl block mb-2 hover:text-[var(--maroon)]">{p.title}</a>
-                    <p className="font-serif mb-3 whitespace-pre-line" style={{ opacity: 0.85 }}>
-                      {(p.content || "").split("\n").slice(0, 2).join("\n")}
+                    <p className="font-serif mb-3 whitespace-pre-line" style={{ color: "var(--ink)", opacity: 0.85 }}>
+                      {stripMarkdown((p.content || "").split("\n").slice(0, 2).join("\n"))}
                     </p>
                     {p.tags?.length > 0 && (
                       <div className="flex gap-1.5 flex-wrap mb-3">

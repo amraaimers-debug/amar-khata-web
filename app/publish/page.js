@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabase";
+import { ALL_TYPES } from "../typeColors";
 
 function PublishForm() {
   const [session, setSession] = useState(undefined); // undefined = লোড হচ্ছে
@@ -12,6 +13,7 @@ function PublishForm() {
   const [penName, setPenName] = useState("");
   const [status, setStatus] = useState("");
   const [loadingPost, setLoadingPost] = useState(false);
+  const textareaRef = useRef(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit");
@@ -53,6 +55,36 @@ function PublishForm() {
         </a>
       </div>
     );
+  }
+
+  // --- ফরম্যাটিং টুলবার: টেক্সটএরিয়ার নির্বাচিত অংশের চারপাশে ** বা * বসিয়ে দেয় ---
+  function wrapSelection(marker) {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    const selected = content.slice(start, end) || "লেখা";
+    const newText = content.slice(0, start) + marker + selected + marker + content.slice(end);
+    setContent(newText);
+    requestAnimationFrame(() => {
+      ta.focus();
+      ta.selectionStart = start + marker.length;
+      ta.selectionEnd = start + marker.length + selected.length;
+    });
+  }
+
+  // লাইনের শুরুতে হেডিং চিহ্ন (##) বসায়
+  function insertHeading() {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    const start = ta.selectionStart;
+    const lineStart = content.lastIndexOf("\n", start - 1) + 1;
+    const already = content.slice(lineStart, lineStart + 3) === "## ";
+    const newText = already
+      ? content.slice(0, lineStart) + content.slice(lineStart + 3)
+      : content.slice(0, lineStart) + "## " + content.slice(lineStart);
+    setContent(newText);
+    requestAnimationFrame(() => ta.focus());
   }
 
   async function handlePublish(e) {
@@ -98,8 +130,7 @@ function PublishForm() {
             placeholder="আপনার নাম/ছদ্মনাম (লেখায় এটাই দেখানো হবে)" className="border border-black/20 rounded-md px-3 py-2"
           />
           <select value={type} onChange={(e) => setType(e.target.value)} className="border border-black/20 rounded-md px-3 py-2">
-            <option value="কবিতা">কবিতা</option>
-            <option value="গল্প">গল্প</option>
+            {ALL_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
           <input
             required value={title} onChange={(e) => setTitle(e.target.value)}
@@ -109,11 +140,42 @@ function PublishForm() {
             value={tags} onChange={(e) => setTags(e.target.value)}
             placeholder="ট্যাগ (কমা দিয়ে আলাদা)" className="border border-black/20 rounded-md px-3 py-2"
           />
-          <textarea
-            required value={content} onChange={(e) => setContent(e.target.value)}
-            placeholder="লেখা..." rows={10}
-            className="border border-black/20 rounded-md px-3 py-2 font-serif"
-          />
+
+          <div>
+            <div className="flex items-center gap-2 mb-1.5">
+              <button
+                type="button" onClick={insertHeading}
+                title="হেডিং (লাইনের শুরুতে বসান)"
+                className="border border-black/20 rounded px-3 py-1 text-sm font-bold"
+              >
+                H
+              </button>
+              <button
+                type="button" onClick={() => wrapSelection("**")}
+                title="বোল্ড (লেখা সিলেক্ট করে চাপুন)"
+                className="border border-black/20 rounded px-3 py-1 text-sm font-bold"
+              >
+                B
+              </button>
+              <button
+                type="button" onClick={() => wrapSelection("*")}
+                title="ইটালিক (লেখা সিলেক্ট করে চাপুন)"
+                className="border border-black/20 rounded px-3 py-1 text-sm italic"
+              >
+                I
+              </button>
+              <span className="text-xs text-black/45 ml-1">
+                লেখা সিলেক্ট করে B/I চাপুন, হেডিং-এর জন্য লাইনে কার্সর রেখে H চাপুন
+              </span>
+            </div>
+            <textarea
+              ref={textareaRef}
+              required value={content} onChange={(e) => setContent(e.target.value)}
+              placeholder="লেখা..." rows={10}
+              className="w-full border border-black/20 rounded-md px-3 py-2 font-serif"
+            />
+          </div>
+
           <div className="flex items-center gap-3">
             <button className="bg-maroon text-white rounded-md py-2 px-5 font-semibold">
               {editId ? "সংরক্ষণ করুন" : "প্রকাশ করুন"}
