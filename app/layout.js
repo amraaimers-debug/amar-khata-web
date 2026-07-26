@@ -49,6 +49,8 @@ export default function RootLayout({ children }) {
               <a href="/" className="hover:text-[var(--maroon)]">হোম</a>
               <a href="/?type=কবিতা" className="hover:text-[var(--maroon)]">কবিতা</a>
               <a href="/?type=গল্প" className="hover:text-[var(--maroon)]">গল্প</a>
+              <a href="/?type=দর্শন" className="hover:text-[var(--maroon)]">দর্শন</a>
+              <a href="/?type=শায়েরি" className="hover:text-[var(--maroon)]">শায়েরি</a>
             </nav>
             <div className="flex items-center gap-3">
               <Suspense fallback={<div className="w-36 h-8" />}>
