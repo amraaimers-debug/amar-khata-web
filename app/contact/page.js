@@ -12,12 +12,9 @@ export default function ContactPage() {
         <p className="mb-4">
           অন্য যেকোনো প্রয়োজনে ইমেইল করতে পারেন:
           <br />
-          <a href="mailto:contact@amarkhata.example.com" className="underline" style={{ color: "var(--maroon)" }}>
+          <a href="mailto:shobderashor6@gmail.com" className="underline" style={{ color: "var(--maroon)" }}>
             contact@amarkhata.example.com
           </a>
-        </p>
-        <p className="text-sm" style={{ color: "var(--muted)" }}>
-          (এই ইমেইল ঠিকানাটি বসানোর জন্য একটা প্লেসহোল্ডার — আপনার আসল ইমেইল দিয়ে বদলে নিন)
         </p>
       </div>
     </div>
