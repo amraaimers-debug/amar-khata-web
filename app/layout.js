@@ -78,8 +78,13 @@ export default function RootLayout({ children }) {
         <main className="max-w-5xl mx-auto px-6 py-8">{children}</main>
 
         <footer style={{ borderTop: "1px solid var(--line)", background: "var(--surface)" }}>
+          <div className="max-w-5xl mx-auto px-6 pt-6 pb-3 flex items-center justify-center gap-5 text-xs font-semibold">
+            <a href="/about" className="hover:text-[var(--maroon)]" style={{ color: "var(--muted)" }}>সম্পর্কে</a>
+            <a href="/privacy" className="hover:text-[var(--maroon)]" style={{ color: "var(--muted)" }}>প্রাইভেসি পলিসি</a>
+            <a href="/contact" className="hover:text-[var(--maroon)]" style={{ color: "var(--muted)" }}>যোগাযোগ</a>
+          </div>
           <div
-            className="max-w-5xl mx-auto px-6 py-6 text-center text-xs"
+            className="max-w-5xl mx-auto px-6 pb-6 text-center text-xs"
             style={{ color: "var(--muted)" }}
           >
             আমার খাতা © {new Date().getFullYear()} · সর্বস্বত্ব সংরক্ষিত। এখানে প্রকাশিত প্রতিটি লেখার অধিকার তার নিজ নিজ লেখকের।
