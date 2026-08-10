@@ -17,6 +17,9 @@ export const metadata = {
     locale: "bn_BD",
     type: "website",
   },
+  alternates: {
+    types: { "application/rss+xml": "/rss.xml" },
+  },
   twitter: {
     card: "summary_large_image",
   },
@@ -58,6 +61,7 @@ export default function RootLayout({ children }) {
               <a href="/?type=গল্প" className="hover:text-[var(--maroon)]">গল্প</a>
               <a href="/?type=দর্শন" className="hover:text-[var(--maroon)]">দর্শন</a>
               <a href="/?type=শায়েরি" className="hover:text-[var(--maroon)]">শায়েরি</a>
+              <a href="/random" className="hover:text-[var(--maroon)]" title="এলোমেলো একটা লেখা পড়ুন">এলোমেলো লেখা</a>
             </nav>
             <div className="flex items-center gap-3">
               <Suspense fallback={<div className="w-36 h-8" />}>
@@ -89,6 +93,7 @@ export default function RootLayout({ children }) {
             <a href="/about" className="hover:text-[var(--maroon)]" style={{ color: "var(--muted)" }}>সম্পর্কে</a>
             <a href="/privacy" className="hover:text-[var(--maroon)]" style={{ color: "var(--muted)" }}>প্রাইভেসি পলিসি</a>
             <a href="/contact" className="hover:text-[var(--maroon)]" style={{ color: "var(--muted)" }}>যোগাযোগ</a>
+            <a href="/rss.xml" className="hover:text-[var(--maroon)]" style={{ color: "var(--muted)" }}>RSS ফিড</a>
           </div>
           <div
             className="max-w-5xl mx-auto px-6 pb-6 text-center text-xs"

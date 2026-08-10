@@ -1,8 +1,8 @@
 import { supabase } from "../../../lib/supabase";
 import PostInteractions from "./PostInteractions";
 import AuthorControls from "./AuthorControls";
+import ReadingControls from "./ReadingControls";
 import ShareButton from "../../ShareButton";
-import MarkdownText from "../../MarkdownText";
 import { typeColorVar } from "../../typeColors";
 
 export async function generateMetadata({ params }) {
@@ -32,6 +32,14 @@ export default async function PostPage({ params }) {
 
   if (!post) return <p>লেখাটি পাওয়া যায়নি।</p>;
 
+  const { data: related } = await supabase
+    .from("posts")
+    .select("id,title,type,author_name")
+    .eq("type", post.type)
+    .neq("id", post.id)
+    .order("created_at", { ascending: false })
+    .limit(3);
+
   const catColor = typeColorVar(post.type);
 
   return (
@@ -44,11 +52,9 @@ export default async function PostPage({ params }) {
       </div>
       <h1 className="font-display text-4xl mb-2">{post.title}</h1>
       <div className="text-sm mb-8" style={{ color: "var(--muted)" }}>{post.author_name}</div>
-      <MarkdownText
-        text={post.content}
-        className="font-serif text-lg leading-loose mb-10"
-        style={{ color: "var(--ink)" }}
-      />
+
+      <ReadingControls content={post.content} />
+
       <div className="flex items-center gap-3 mb-2">
         <ShareButton
           title={post.title}
@@ -58,6 +64,25 @@ export default async function PostPage({ params }) {
       </div>
       <AuthorControls postId={post.id} />
       <PostInteractions post={post} initialComments={comments || []} />
+
+      {related && related.length > 0 && (
+        <div className="mt-14 pt-8" style={{ borderTop: "1px solid var(--line)" }}>
+          <h3 className="font-display text-2xl mb-4">সম্পর্কিত লেখা</h3>
+          <div className="flex flex-col gap-3">
+            {related.map((r) => (
+              <a
+                key={r.id}
+                href={`/post/${r.id}`}
+                className="block p-4 rounded-lg hover:opacity-80"
+                style={{ border: "1px solid var(--line)", background: "var(--surface)" }}
+              >
+                <div className="text-xs mb-1" style={{ color: "var(--muted)" }}>{r.type} · {r.author_name}</div>
+                <div className="font-display text-lg">{r.title}</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </article>
   );
 }
