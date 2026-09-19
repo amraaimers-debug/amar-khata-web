@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase, getVisitorId } from "../lib/supabase";
 import ShareButton from "./ShareButton";
-import { typeColorVar, ALL_TYPES } from "./typeColors";
+import { typeColorVar, typeIconPath, ALL_TYPES } from "./typeColors";
 import { stripMarkdown } from "./MarkdownText";
 
 const avatarColors = ["#7C2233", "#2F5D50", "#B4872E", "#5A4A6B"];
@@ -128,48 +128,71 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
             </div>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {visible.length === 0 && (
-              <div className="text-center py-14 rounded-lg border border-dashed" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>কোনো লেখা পাওয়া যায়নি।</div>
+              <div className="sm:col-span-2 text-center py-14 rounded-lg border border-dashed" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>কোনো লেখা পাওয়া যায়নি।</div>
             )}
-            {shown.map((p) => {
+            {shown.map((p, idx) => {
               const catColor = typeColorVar(p.type);
+              const iconPath = typeIconPath(p.type);
               const isLiked = likedIds.includes(p.id);
               const isSaved = saved.includes(p.id);
+              const isWide = idx === 0;
               return (
-                <article key={p.id} className="flex rounded-lg overflow-hidden shadow-sm" style={{ border: "1px solid var(--line)", background: "var(--surface)" }}>
-                  <div className="w-1.5 flex-none" style={{ background: catColor }}></div>
-                  <div className="p-5 flex-1 min-w-0">
-                    <div className="flex items-center gap-2 text-xs mb-2 flex-wrap" style={{ color: "var(--muted)" }}>
-                      {avatarUrl ? (
-                        <img src={avatarUrl} alt={p.author_name} className="w-6 h-6 rounded-full object-cover flex-none" />
-                      ) : (
-                        <span className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-bold" style={{ background: avatarColor(p.author_name) }}>{(p.author_name || "?")[0]}</span>
-                      )}
-                      <span style={{ color: "var(--ink)" }}>{p.author_name}</span><span>·</span>
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full" style={{ background: `color-mix(in srgb, ${catColor} 16%, transparent)`, color: catColor }}>{p.type}</span>
-                    </div>
-                    <a href={`/post/${p.id}`} className="font-display text-xl block mb-2 hover:text-[var(--maroon)]">{p.title}</a>
-                    <p className="font-serif mb-3 whitespace-pre-line" style={{ color: "var(--ink)", opacity: 0.85 }}>{stripMarkdown((p.content || "").split("\n").slice(0, 2).join("\n"))}</p>
-                    {p.tags?.length > 0 && (
-                      <div className="flex gap-1.5 flex-wrap mb-3">
-                        {p.tags.map((t) => (<button key={t} onClick={() => setTag(t)} className="text-[11px] px-2 py-0.5 rounded-full border" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>#{t}</button>))}
+                <article
+                  key={p.id}
+                  className={`rounded-lg overflow-hidden shadow-sm flex flex-col ${isWide ? "sm:col-span-2 sm:flex-row" : ""}`}
+                  style={{ border: "1px solid var(--line)", background: "var(--surface)" }}
+                >
+                  <div
+                    className={isWide ? "sm:w-2 h-1.5 sm:h-auto flex-none" : "h-1.5 flex-none"}
+                    style={{ background: catColor }}
+                  ></div>
+                  <div className={`p-5 flex-1 min-w-0 flex flex-col ${isWide ? "sm:flex-row sm:gap-6" : ""}`}>
+                    <div className={isWide ? "sm:flex-1 min-w-0 flex flex-col" : "flex flex-col flex-1"}>
+                      <div className="flex items-center gap-2 mb-2.5">
+                        <span
+                          className="w-6 h-6 rounded-full flex items-center justify-center flex-none"
+                          style={{ background: `color-mix(in srgb, ${catColor} 16%, transparent)`, color: catColor }}
+                        >
+                          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.8">
+                            <path d={iconPath} />
+                          </svg>
+                        </span>
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full" style={{ background: `color-mix(in srgb, ${catColor} 16%, transparent)`, color: catColor }}>{p.type}</span>
                       </div>
-                    )}
-                    <div className="flex items-center gap-1 pt-3 border-t border-dashed" style={{ borderColor: "var(--line)" }}>
-                      <button onClick={() => toggleLike(p.id)} className="text-xs px-2.5 py-1.5 rounded-full flex items-center gap-1.5" style={{ color: isLiked ? "var(--maroon)" : "var(--muted)" }}>
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.7"><path d="M12 21s-7.5-4.6-10.2-9.1C.1 8.7 1.6 5 5.2 4.3c2.1-.4 4 .6 6.8 3.2 2.8-2.6 4.7-3.6 6.8-3.2 3.6.7 5.1 4.4 3.4 7.6C19.5 16.4 12 21 12 21Z"/></svg>
-                        {p.likes_count}
-                      </button>
-                      <a href={`/post/${p.id}`} className="text-xs px-2.5 py-1.5 rounded-full flex items-center gap-1.5" style={{ color: "var(--muted)" }}>
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                        মন্তব্য করুন
+                      <a href={`/post/${p.id}`} className={`font-display block mb-2 hover:text-[var(--maroon)] ${isWide ? "text-2xl" : "text-lg"}`}>
+                        {p.title}
                       </a>
-                      <button onClick={() => toggleSave(p.id)} className="text-xs px-2.5 py-1.5 rounded-full flex items-center gap-1.5" style={{ color: isSaved ? "var(--gold)" : "var(--muted)" }}>
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill={isSaved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.7"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-                        {isSaved ? "সংরক্ষিত" : "সংরক্ষণ"}
-                      </button>
-                      <ShareButton title={p.title} url={typeof window !== "undefined" ? `${window.location.origin}/post/${p.id}` : undefined} className="text-xs px-2.5 py-1.5 rounded-full flex items-center gap-1.5" style={{ color: "var(--muted)" }} />
+                      <p className={`font-serif mb-3 ${isWide ? "text-base line-clamp-3" : "text-sm line-clamp-3 flex-1"}`} style={{ color: "var(--ink)", opacity: 0.85 }}>
+                        {stripMarkdown((p.content || "").split("\n").join(" "))}
+                      </p>
+                      {p.tags?.length > 0 && (
+                        <div className="flex gap-1.5 flex-wrap mb-3">
+                          {p.tags.slice(0, isWide ? 5 : 3).map((t) => (<button key={t} onClick={() => setTag(t)} className="text-[11px] px-2 py-0.5 rounded-full border" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>#{t}</button>))}
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 text-xs mb-3 mt-auto" style={{ color: "var(--muted)" }}>
+                        {avatarUrl ? (
+                          <img src={avatarUrl} alt={p.author_name} className="w-5 h-5 rounded-full object-cover flex-none" />
+                        ) : (
+                          <span className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-none" style={{ background: avatarColor(p.author_name) }}>{(p.author_name || "?")[0]}</span>
+                        )}
+                        <span style={{ color: "var(--ink)" }}>{p.author_name}</span>
+                      </div>
+                      <div className="flex items-center gap-1 pt-3 border-t border-dashed" style={{ borderColor: "var(--line)" }}>
+                        <button onClick={() => toggleLike(p.id)} title="লাইক" className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: isLiked ? "var(--maroon)" : "var(--muted)" }}>
+                          <svg viewBox="0 0 24 24" width="14" height="14" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.7"><path d="M12 21s-7.5-4.6-10.2-9.1C.1 8.7 1.6 5 5.2 4.3c2.1-.4 4 .6 6.8 3.2 2.8-2.6 4.7-3.6 6.8-3.2 3.6.7 5.1 4.4 3.4 7.6C19.5 16.4 12 21 12 21Z"/></svg>
+                          {p.likes_count}
+                        </button>
+                        <a href={`/post/${p.id}`} title="মন্তব্য করুন" className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: "var(--muted)" }}>
+                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                        </a>
+                        <button onClick={() => toggleSave(p.id)} title="সংরক্ষণ" className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: isSaved ? "var(--gold)" : "var(--muted)" }}>
+                          <svg viewBox="0 0 24 24" width="14" height="14" fill={isSaved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.7"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                        </button>
+                        <ShareButton title={p.title} url={typeof window !== "undefined" ? `${window.location.origin}/post/${p.id}` : undefined} className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: "var(--muted)" }} />
+                      </div>
                     </div>
                   </div>
                 </article>
