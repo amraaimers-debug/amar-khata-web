@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase, getVisitorId } from "../lib/supabase";
 import ShareButton from "./ShareButton";
+import AdSlot from "./AdSlot";
 import { typeColorVar, typeIconPath, ALL_TYPES } from "./typeColors";
 import { stripMarkdown } from "./MarkdownText";
 
@@ -238,6 +239,10 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
 
           <div className="rounded-lg p-5 text-sm" style={{ border: "1px solid var(--line)", background: "var(--surface)", color: "var(--muted)" }}>
             মোট {posts.length}টি লেখা · {totalLikes} জনের ভালোবাসা
+          </div>
+
+          <div className="rounded-lg p-4" style={{ border: "1px solid var(--line)", background: "var(--surface)" }}>
+            <AdSlot slot={process.env.NEXT_PUBLIC_AD_SLOT_SIDEBAR} />
           </div>
         </aside>
       </div>
