@@ -76,21 +76,37 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
   return (
     <div>
       {heroPost && view === "home" && !tag && typeFilter === "সব" && !query && (
-        <div className="flex rounded-lg overflow-hidden mb-8" style={{ border: "1px solid var(--line)", background: "var(--surface)" }}>
-          <div className="w-[190px] flex-none hidden sm:flex items-center justify-center" style={{ background: "linear-gradient(155deg, var(--maroon), #4a1420 75%)" }}>
-            <svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="#fff" strokeWidth="1.3">
-              <path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.4V19h8.6z" />
-              <line x1="16" y1="8" x2="3" y2="21" /><line x1="17" y1="15" x2="9.5" y2="15" />
-            </svg>
-          </div>
-          <div className="p-7">
-            <div className="flex items-center gap-2 text-xs font-bold mb-3" style={{ color: "var(--maroon)" }}>
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <div
+          className="relative rounded-xl overflow-hidden mb-10 px-8 py-14 sm:px-14 sm:py-20"
+          style={{
+            background: "radial-gradient(circle at 18% 15%, color-mix(in srgb, var(--gold) 20%, var(--paper)) 0%, var(--surface) 45%, var(--paper) 100%)",
+            border: "1px solid var(--line)",
+          }}
+        >
+          <svg
+            viewBox="0 0 24 24" width="260" height="260" fill="none" stroke="var(--gold)" strokeWidth="0.6"
+            className="absolute -right-10 -bottom-16 opacity-[0.09] pointer-events-none hidden sm:block"
+          >
+            <path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.4V19h8.6z" />
+            <line x1="16" y1="8" x2="3" y2="21" /><line x1="17" y1="15" x2="9.5" y2="15" />
+          </svg>
+
+          <div className="relative max-w-2xl">
+            <div className="flex items-center gap-2 text-xs font-bold mb-4 tracking-wide uppercase" style={{ color: "var(--gold)" }}>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
               সবচেয়ে ভালোবাসা পাওয়া লেখা
             </div>
-            <a href={`/post/${heroPost.id}`} className="font-display text-3xl block mb-3 hover:text-[var(--maroon)]">{heroPost.title}</a>
-            <p className="font-serif mb-3" style={{ color: "var(--ink)", opacity: 0.85 }}>{stripMarkdown((heroPost.content || "").split("\n")[0])}</p>
-            <div className="flex items-center gap-2 text-xs" style={{ color: "var(--muted)" }}>
+            <a
+              href={`/post/${heroPost.id}`}
+              className="font-display block mb-5 hover:opacity-80 transition-opacity"
+              style={{ fontSize: "clamp(32px, 6vw, 56px)", lineHeight: 1.1, color: "var(--ink)" }}
+            >
+              {heroPost.title}
+            </a>
+            <p className="font-serif mb-6" style={{ color: "var(--ink)", opacity: 0.75, fontSize: "17px" }}>
+              {stripMarkdown((heroPost.content || "").split("\n")[0])}
+            </p>
+            <div className="flex items-center gap-3 text-sm" style={{ color: "var(--muted)" }}>
               <span>{heroPost.author_name}</span><span>·</span>
               <span>❤ {heroPost.likes_count}</span>
             </div>
