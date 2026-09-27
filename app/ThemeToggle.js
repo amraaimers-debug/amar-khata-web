@@ -2,11 +2,14 @@
 import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
 
   useEffect(() => {
     const saved = localStorage.getItem("amarkhata_theme");
-    if (saved === "dark") {
+    if (saved === "light") {
+      document.documentElement.setAttribute("data-theme", "light");
+      setDark(false);
+    } else {
       document.documentElement.setAttribute("data-theme", "dark");
       setDark(true);
     }
