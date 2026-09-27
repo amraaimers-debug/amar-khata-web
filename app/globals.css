@@ -5,6 +5,28 @@
 @tailwind utilities;
 
 :root{
+  --paper:#15110D;
+  --surface:#1F1911;
+  --ink:#F3E8D6;
+  --maroon:#C1594A;
+  --forest:#6FBF9B;
+  --indigo:#93A6DE;
+  --gold:#D9A94E;
+  --line:rgba(243,232,214,0.14);
+  --muted:#B9AC90;
+}
+[data-theme="dark"]{
+  --paper:#15110D;
+  --surface:#1F1911;
+  --ink:#F3E8D6;
+  --maroon:#C1594A;
+  --forest:#6FBF9B;
+  --indigo:#93A6DE;
+  --gold:#D9A94E;
+  --line:rgba(243,232,214,0.14);
+  --muted:#B9AC90;
+}
+[data-theme="light"]{
   --paper:#F7F1E2;
   --surface:#FFFDF7;
   --ink:#241F18;
@@ -14,17 +36,6 @@
   --gold:#B4872E;
   --line:rgba(36,31,24,0.15);
   --muted:#786F5E;
-}
-[data-theme="dark"]{
-  --paper:#181410;
-  --surface:#221C16;
-  --ink:#EFE7D8;
-  --maroon:#E2637A;
-  --forest:#6FBCA0;
-  --indigo:#8FA3D9;
-  --gold:#D9A94E;
-  --line:rgba(239,231,216,0.14);
-  --muted:#B2A891;
 }
 
 body{
