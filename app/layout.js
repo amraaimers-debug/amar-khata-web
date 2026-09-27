@@ -43,12 +43,12 @@ export default function RootLayout({ children }) {
           <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
             <a href="/" className="flex items-center gap-2.5">
               <svg viewBox="0 0 40 40" width="32" height="32" fill="none">
-                <rect x="1" y="1" width="38" height="38" rx="6" stroke="#7C2233" strokeWidth="1.4" />
+                <rect x="1" y="1" width="38" height="38" rx="6" stroke="var(--maroon)" strokeWidth="1.4" />
                 <path
                   d="M20 12c-2.5-2.2-6-2.8-9-1.6v15.4c3-1.2 6.5-.6 9 1.6 2.5-2.2 6-2.8 9-1.6V10.4c-3-1.2-6.5-.6-9 1.6Z"
-                  stroke="#B4872E" strokeWidth="1.6"
+                  stroke="var(--gold)" strokeWidth="1.6"
                 />
-                <path d="M20 12v15.4" stroke="#B4872E" strokeWidth="1.6" />
+                <path d="M20 12v15.4" stroke="var(--gold)" strokeWidth="1.6" />
               </svg>
               <div>
                 <div className="font-display text-xl leading-none">আমার খাতা</div>
