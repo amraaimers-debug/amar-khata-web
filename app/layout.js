@@ -77,7 +77,7 @@ export default function RootLayout({ children }) {
               </a>
               <a
                 href="/publish"
-                className="text-sm font-bold px-4 py-2 rounded"
+                className="pulse-gold text-sm font-bold px-4 py-2 rounded"
                 style={{ background: "var(--maroon)", color: "#fff" }}
               >
                 লেখক লগইন
