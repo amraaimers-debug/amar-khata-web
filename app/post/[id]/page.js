@@ -3,6 +3,7 @@ import PostInteractions from "./PostInteractions";
 import AuthorControls from "./AuthorControls";
 import ReadingControls from "./ReadingControls";
 import ShareButton from "../../ShareButton";
+import QuoteImageButton from "../../QuoteImageButton";
 import { typeColorVar } from "../../typeColors";
 
 export async function generateMetadata({ params }) {
@@ -41,6 +42,7 @@ export default async function PostPage({ params }) {
     .limit(3);
 
   const catColor = typeColorVar(post.type);
+  const { data: settings } = await supabase.from("site_settings").select("avatar_url").eq("id", 1).single();
 
   return (
     <article className="max-w-2xl mx-auto">
@@ -58,6 +60,16 @@ export default async function PostPage({ params }) {
       <div className="flex items-center gap-3 mb-2">
         <ShareButton
           title={post.title}
+          className="px-3 py-1.5 rounded-full border font-semibold text-sm flex items-center gap-1.5"
+          style={{ borderColor: "var(--line)", color: "var(--ink)" }}
+        />
+        <QuoteImageButton
+          postId={post.id}
+          title={post.title}
+          author={post.author_name}
+          type={post.type}
+          content={post.content}
+          avatarUrl={settings?.avatar_url || null}
           className="px-3 py-1.5 rounded-full border font-semibold text-sm flex items-center gap-1.5"
           style={{ borderColor: "var(--line)", color: "var(--ink)" }}
         />
