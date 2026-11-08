@@ -51,7 +51,7 @@ export default function RootLayout({ children }) {
                 <path d="M20 12v15.4" stroke="var(--gold)" strokeWidth="1.6" />
               </svg>
               <div>
-                <div className="font-display text-xl leading-none">আমার খাতা</div>
+                <div className="rgb-text font-display text-xl leading-snug">আমার খাতা</div>
                 <div className="text-[11px]" style={{ color: "var(--muted)" }}>সাহিত্য পোর্টাল</div>
               </div>
             </a>
@@ -77,7 +77,7 @@ export default function RootLayout({ children }) {
               </a>
               <a
                 href="/publish"
-                className="pulse-gold text-sm font-bold px-4 py-2 rounded"
+                className="rgb-glow text-sm font-bold px-4 py-2 rounded"
                 style={{ background: "var(--maroon)", color: "#fff" }}
               >
                 লেখক লগইন
