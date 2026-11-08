@@ -44,3 +44,94 @@ body{
   transition: background .25s ease, color .25s ease;
 }
 ::selection{ background: var(--maroon); color: var(--paper); }
+
+/* ============ মোশন ইফেক্ট ============ */
+
+/* মোমবাতির আলোর মতো আস্তে আস্তে জ্বলে-নিভে থাকা */
+@keyframes candleFlicker {
+  0%, 100% { opacity: 1; }
+  27% { opacity: 0.93; }
+  52% { opacity: 1; }
+  78% { opacity: 0.96; }
+}
+.hero-glow { animation: candleFlicker 6.5s ease-in-out infinite; }
+
+/* সোনালি স্পন্দন */
+@keyframes goldPulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 45%, transparent); }
+  50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--gold) 0%, transparent); }
+}
+.pulse-gold { animation: goldPulse 3s ease-in-out infinite; }
+
+/* কার্ডে হোভার করলে সোনালি আলোর ঝিলিক */
+.shimmer-hover { position: relative; overflow: hidden; }
+.shimmer-hover::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -150%;
+  width: 55%; height: 100%;
+  background: linear-gradient(120deg, transparent, color-mix(in srgb, var(--gold) 30%, transparent), transparent);
+  transform: skewX(-20deg);
+  transition: left .7s ease;
+  pointer-events: none;
+}
+.shimmer-hover:hover::after { left: 150%; }
+
+/* ============ নিয়ন RGB মোশন ============ */
+
+/* বয়ে চলা রংধনু-গ্রেডিয়েন্ট (শুরু ও শেষ রং একই, তাই লুপ মসৃণ) */
+@keyframes rgbFlow {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 150% 50%; }
+}
+
+/* সবসময় ঘুরতে থাকা নিয়ন বর্ডার (হিরো ব্যানারের জন্য) */
+.rgb-border { position: relative; }
+.rgb-border::before,
+.rgb-hover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff0040, #ff8a00, #ffe600, #00ff6a, #00d4ff, #7a00ff, #ff00c8, #ff0040);
+  background-size: 300% 100%;
+  animation: rgbFlow 6s linear infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+/* শুধু হোভারে ফুটে ওঠা নিয়ন বর্ডার (কার্ডের জন্য) */
+.rgb-hover { position: relative; }
+.rgb-hover::before { opacity: 0; transition: opacity .3s ease; }
+.rgb-hover:hover::before { opacity: 1; }
+
+/* নিয়ন গ্রেডিয়েন্ট লেখা (লোগোর জন্য) */
+.rgb-text {
+  background: linear-gradient(90deg, #ff0040, #ff8a00, #ffe600, #00ff6a, #00d4ff, #7a00ff, #ff00c8, #ff0040);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rgbFlow 6s linear infinite;
+}
+
+/* রং বদলাতে থাকা নিয়ন গ্লো (বাটনের জন্য) */
+@keyframes rgbGlow {
+  0%   { box-shadow: 0 0 14px 1px rgba(255, 0, 64, .6); }
+  16%  { box-shadow: 0 0 14px 1px rgba(255, 138, 0, .6); }
+  33%  { box-shadow: 0 0 14px 1px rgba(255, 230, 0, .6); }
+  50%  { box-shadow: 0 0 14px 1px rgba(0, 255, 106, .6); }
+  66%  { box-shadow: 0 0 14px 1px rgba(0, 212, 255, .6); }
+  83%  { box-shadow: 0 0 14px 1px rgba(122, 0, 255, .6); }
+  100% { box-shadow: 0 0 14px 1px rgba(255, 0, 64, .6); }
+}
+.rgb-glow { animation: rgbGlow 6s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow, .pulse-gold, .rgb-glow, .rgb-text,
+  .rgb-border::before, .rgb-hover::before { animation: none; }
+  .shimmer-hover::after { transition: none; }
+}
