@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase, getVisitorId } from "../lib/supabase";
 import ShareButton from "./ShareButton";
+import QuoteImageButton from "./QuoteImageButton";
 import AdSlot from "./AdSlot";
 import { typeColorVar, typeIconPath, ALL_TYPES } from "./typeColors";
 import { stripMarkdown } from "./MarkdownText";
@@ -77,12 +78,13 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
     <div>
       {heroPost && view === "home" && !tag && typeFilter === "সব" && !query && (
         <div
-          className="relative rounded-xl overflow-hidden mb-10 px-8 py-14 sm:px-14 sm:py-20"
-          style={{
-            background: "radial-gradient(circle at 18% 15%, color-mix(in srgb, var(--gold) 20%, var(--paper)) 0%, var(--surface) 45%, var(--paper) 100%)",
-            border: "1px solid var(--line)",
-          }}
+          className="rgb-border relative rounded-xl overflow-hidden mb-10 px-8 py-14 sm:px-14 sm:py-20"
+          style={{ background: "var(--surface)", border: "1px solid var(--line)" }}
         >
+          <div
+            className="hero-glow absolute inset-0 pointer-events-none"
+            style={{ background: "radial-gradient(circle at 18% 15%, color-mix(in srgb, var(--gold) 20%, var(--paper)) 0%, var(--surface) 45%, var(--paper) 100%)" }}
+          />
           <svg
             viewBox="0 0 24 24" width="260" height="260" fill="none" stroke="var(--gold)" strokeWidth="0.6"
             className="absolute -right-10 -bottom-16 opacity-[0.09] pointer-events-none hidden sm:block"
@@ -158,7 +160,7 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
               return (
                 <article
                   key={p.id}
-                  className={`rounded-lg overflow-hidden shadow-sm flex flex-col ${isWide ? "sm:col-span-2 sm:flex-row" : ""}`}
+                  className={`shimmer-hover rgb-hover rounded-lg overflow-hidden shadow-sm flex flex-col ${isWide ? "sm:col-span-2 sm:flex-row" : ""}`}
                   style={{ border: "1px solid var(--line)", background: "var(--surface)" }}
                 >
                   <div
@@ -209,6 +211,7 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
                           <svg viewBox="0 0 24 24" width="14" height="14" fill={isSaved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.7"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
                         </button>
                         <ShareButton title={p.title} url={typeof window !== "undefined" ? `${window.location.origin}/post/${p.id}` : undefined} className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: "var(--muted)" }} />
+                        <QuoteImageButton postId={p.id} title={p.title} author={p.author_name} type={p.type} content={p.content} avatarUrl={avatarUrl} compact className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: "var(--muted)" }} />
                       </div>
                     </div>
                   </div>
