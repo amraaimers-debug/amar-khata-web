@@ -101,6 +101,7 @@ body{
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   pointer-events: none;
+  z-index: 1; /* ভেতরের গ্লো-লেয়ারের ওপরে থাকবে */
 }
 
 /* শুধু হোভারে ফুটে ওঠা নিয়ন বর্ডার (কার্ডের জন্য) */
@@ -134,4 +135,31 @@ body{
   .hero-glow, .pulse-gold, .rgb-glow, .rgb-text,
   .rgb-border::before, .rgb-hover::before { animation: none; }
   .shimmer-hover::after { transition: none; }
+}
+
+/* ============ ফোন-বান্ধব সমন্বয় ============ */
+
+/* নেভিগেশনের স্ক্রলবার লুকানো (আঙুলে সরানো যাবে) */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* পাতা যেন কখনো পাশে সরে না যায় */
+html { -webkit-text-size-adjust: 100%; }
+body { overflow-x: hidden; }
+
+/* ফোনে: ইনপুটে ক্লিক করলে iPhone যেন নিজে জুম না করে (১৬px এর কম হলে জুম করে) */
+@media (max-width: 767px) {
+  input, textarea, select { font-size: 16px !important; }
+}
+
+/* ফোনে: অ্যানিমেশন বন্ধ রেখে স্থির নিয়ন (ব্যাটারি ও পারফরম্যান্স বাঁচাতে) */
+@media (max-width: 767px) {
+  .rgb-text, .rgb-glow, .rgb-border::before { animation: none; }
+  .rgb-text, .rgb-border::before { background-size: 100% 100%; }
+  .rgb-glow { box-shadow: 0 0 12px 1px rgba(0, 212, 255, .55); }
+}
+
+/* টাচ ডিভাইসে হোভার ইফেক্ট বন্ধ (আঙুলে চাপলে আটকে থাকে) */
+@media (hover: none) {
+  .rgb-hover::before, .shimmer-hover::after { display: none; }
 }
