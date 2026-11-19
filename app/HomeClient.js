@@ -78,7 +78,7 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
     <div>
       {heroPost && view === "home" && !tag && typeFilter === "সব" && !query && (
         <div
-          className="rgb-border relative rounded-xl overflow-hidden mb-10 px-8 py-14 sm:px-14 sm:py-20"
+          className="rgb-border relative rounded-xl overflow-hidden mb-8 sm:mb-10 px-5 py-10 sm:px-14 sm:py-20"
           style={{ background: "var(--surface)", border: "1px solid var(--line)" }}
         >
           <div
@@ -101,7 +101,7 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
             <a
               href={`/post/${heroPost.id}`}
               className="font-display block mb-5 hover:opacity-80 transition-opacity"
-              style={{ fontSize: "clamp(32px, 6vw, 56px)", lineHeight: 1.1, color: "var(--ink)" }}
+              style={{ fontSize: "clamp(28px, 6vw, 56px)", lineHeight: 1.1, color: "var(--ink)" }}
             >
               {heroPost.title}
             </a>
@@ -133,15 +133,15 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
           <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
             <h2 className="font-display text-xl">{view === "saved" ? "সংরক্ষিত লেখা" : "সাম্প্রতিক লেখা"}</h2>
             <div className="flex items-center gap-3 flex-wrap">
-              <div className="flex flex-wrap rounded-full overflow-hidden border" style={{ borderColor: "var(--line)" }}>
+              <div className="no-scrollbar flex max-w-full overflow-x-auto rounded-full border" style={{ borderColor: "var(--line)" }}>
                 {["সব", ...ALL_TYPES].map((f) => (
-                  <button key={f} onClick={() => setTypeFilter(f)} className="text-xs font-semibold px-3 py-1.5"
+                  <button key={f} onClick={() => setTypeFilter(f)} className="text-xs font-semibold px-3.5 py-2.5 sm:px-3 sm:py-1.5 whitespace-nowrap flex-none"
                     style={{ background: typeFilter === f ? "var(--maroon)" : "transparent", color: typeFilter === f ? "#fff" : "var(--muted)" }}>
                     {f}
                   </button>
                 ))}
               </div>
-              <button onClick={() => setView(view === "saved" ? "home" : "saved")} className="text-xs font-semibold px-3 py-1.5 rounded-full border" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
+              <button onClick={() => setView(view === "saved" ? "home" : "saved")} className="text-xs font-semibold px-3.5 py-2.5 sm:px-3 sm:py-1.5 rounded-full border whitespace-nowrap" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
                 {view === "saved" ? "সব লেখা দেখুন" : `সংরক্ষিত (${saved.length})`}
               </button>
             </div>
@@ -200,18 +200,18 @@ export default function HomeClient({ initialPosts, recentComments, avatarUrl }) 
                         <span style={{ color: "var(--ink)" }}>{p.author_name}</span>
                       </div>
                       <div className="flex items-center gap-1 pt-3 border-t border-dashed" style={{ borderColor: "var(--line)" }}>
-                        <button onClick={() => toggleLike(p.id)} title="লাইক" className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: isLiked ? "var(--maroon)" : "var(--muted)" }}>
+                        <button onClick={() => toggleLike(p.id)} title="লাইক" className="text-xs px-2.5 py-2.5 sm:px-2 sm:py-1.5 rounded-full flex items-center gap-1" style={{ color: isLiked ? "var(--maroon)" : "var(--muted)" }}>
                           <svg viewBox="0 0 24 24" width="14" height="14" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.7"><path d="M12 21s-7.5-4.6-10.2-9.1C.1 8.7 1.6 5 5.2 4.3c2.1-.4 4 .6 6.8 3.2 2.8-2.6 4.7-3.6 6.8-3.2 3.6.7 5.1 4.4 3.4 7.6C19.5 16.4 12 21 12 21Z"/></svg>
                           {p.likes_count}
                         </button>
-                        <a href={`/post/${p.id}`} title="মন্তব্য করুন" className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: "var(--muted)" }}>
+                        <a href={`/post/${p.id}`} title="মন্তব্য করুন" className="text-xs px-2.5 py-2.5 sm:px-2 sm:py-1.5 rounded-full flex items-center gap-1" style={{ color: "var(--muted)" }}>
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
                         </a>
-                        <button onClick={() => toggleSave(p.id)} title="সংরক্ষণ" className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: isSaved ? "var(--gold)" : "var(--muted)" }}>
+                        <button onClick={() => toggleSave(p.id)} title="সংরক্ষণ" className="text-xs px-2.5 py-2.5 sm:px-2 sm:py-1.5 rounded-full flex items-center gap-1" style={{ color: isSaved ? "var(--gold)" : "var(--muted)" }}>
                           <svg viewBox="0 0 24 24" width="14" height="14" fill={isSaved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.7"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
                         </button>
-                        <ShareButton title={p.title} url={typeof window !== "undefined" ? `${window.location.origin}/post/${p.id}` : undefined} className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: "var(--muted)" }} />
-                        <QuoteImageButton postId={p.id} title={p.title} author={p.author_name} type={p.type} content={p.content} avatarUrl={avatarUrl} compact className="text-xs px-2 py-1.5 rounded-full flex items-center gap-1" style={{ color: "var(--muted)" }} />
+                        <ShareButton title={p.title} url={typeof window !== "undefined" ? `${window.location.origin}/post/${p.id}` : undefined} className="text-xs px-2.5 py-2.5 sm:px-2 sm:py-1.5 rounded-full flex items-center gap-1" style={{ color: "var(--muted)" }} />
+                        <QuoteImageButton postId={p.id} title={p.title} author={p.author_name} type={p.type} content={p.content} avatarUrl={avatarUrl} compact className="text-xs px-2.5 py-2.5 sm:px-2 sm:py-1.5 rounded-full flex items-center gap-1" style={{ color: "var(--muted)" }} />
                       </div>
                     </div>
                   </div>
